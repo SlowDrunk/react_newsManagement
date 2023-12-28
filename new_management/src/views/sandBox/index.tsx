@@ -6,6 +6,7 @@ import Home from './components/Home'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import RightList from './components/RightList'
 import RoleList from './components/RoleList'
+import UserList from './components/UserList'
 
 const { Header, Content } = Layout
 
@@ -22,6 +23,7 @@ export default function NewSandBox() {
                         <Route path={'/home'} component={Home}></Route>
                         <Route path={'/right-manage/right/list'} component={RightList}></Route>
                         <Route path={'/right-manage/role/list'} component={RoleList}></Route>
+                        <Route path={'/user-manage/list'} component={UserList}></Route>
                         <Redirect from='/' to={'/home'} exact></Redirect>
                     </Switch>
                 </Content>
