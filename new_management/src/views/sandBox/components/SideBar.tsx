@@ -37,11 +37,16 @@ export default function SideBar() {
   const [routerMenu, setRouterMenu] = useState<MenuItem[]>()
   // 组件挂载完成取数据
   useEffect(() => {
-    axios.get('http://localhost:3004/rights').then((res: any) => {
+    axios.get('http://localhost:3004/rights?_embed=children').then((res: any) => {
       if (res.data.length > 0) {
         setRouterMenu(res.data.map((item: any) => {
+          // pagepermisson用于确定菜单是否显示
           if (item.pagepermisson === 1) {
-            const childrenArr = item.children?.length > 0 ? item.children.map((item: any) => getItem(item.title, item.key, iconMap[item.key]))
+            const childrenArr = item.children?.length > 0 ? item.children.map((item: any) => {
+              if (item.pagepermisson === 1) {
+                return getItem(item.title, item.key, iconMap[item.key])
+              }
+            })
               : null
             return getItem(item.title, item.key, iconMap[item.key], childrenArr)
           }
