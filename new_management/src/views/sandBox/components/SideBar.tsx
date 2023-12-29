@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { HomeOutlined, UserOutlined, PicRightOutlined, AlignCenterOutlined, ExclamationCircleOutlined, SketchOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd';
 import axios from 'axios';
+import { useSelector } from 'react-redux'
 const { Sider } = Layout
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -34,16 +35,26 @@ const iconMap: any = {
 }
 
 export default function SideBar() {
+  const userStore = useSelector((state: any) => state.user)
+  const { roleId } = userStore
+
   const [routerMenu, setRouterMenu] = useState<MenuItem[]>()
+  // 根据当前登录的用户角色渲染菜单
+  const [currentRole, setcurrentRole] = useState<string[]>()
+  useEffect(() => {
+    axios.get(`http://localhost:3004/roles/${roleId}`).then((res) => {
+      setcurrentRole(res.data.rights.checked)
+    })
+  }, [])
   // 组件挂载完成取数据
   useEffect(() => {
     axios.get('http://localhost:3004/rights?_embed=children').then((res: any) => {
       if (res.data.length > 0) {
         setRouterMenu(res.data.map((item: any) => {
           // pagepermisson用于确定菜单是否显示
-          if (item.pagepermisson === 1) {
+          if (item.pagepermisson === 1 && currentRole?.includes(item.key)) {
             const childrenArr = item.children?.length > 0 ? item.children.map((item: any) => {
-              if (item.pagepermisson === 1) {
+              if (item.pagepermisson === 1 && currentRole?.includes(item.key)) {
                 return getItem(item.title, item.key, iconMap[item.key])
               }
             })
@@ -55,7 +66,7 @@ export default function SideBar() {
     }).catch((e) => {
       console.error(e)
     })
-  }, [])
+  }, [currentRole])
 
   const history = useHistory()
   // 当前选择的菜单项

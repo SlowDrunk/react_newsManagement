@@ -12,7 +12,7 @@ const { Header, Content } = Layout
 
 export default function NewSandBox() {
     return (
-        <Layout className='h-[100vh]'>
+        <Layout className='h-[100vh] bg-[#999]'>
             <SideBar />
             <Layout>
                 <Header>
