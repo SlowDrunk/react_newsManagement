@@ -1,0 +1,8 @@
+.wrapperClassName {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 3px;
+}
+.editorClassName {
+  min-height: 480px;
+}

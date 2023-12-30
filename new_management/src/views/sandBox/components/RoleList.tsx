@@ -32,6 +32,8 @@ export default function RoleList() {
     const [currentRole, setCurrentRole] = useState<TableItem>({} as TableItem)
     // 获取数据
     useEffect(() => {
+        let isMonted = true
+        if (!isMonted) return
         axios.get('http://localhost:3004/roles').then(res => {
             if (res.status === 200) {
                 setTableData(res.data)
@@ -51,6 +53,10 @@ export default function RoleList() {
                     message.error('获取权限列表失败')
                 }
             })
+        }).catch(() => {
+            message.error('加载出错啦！')
+        }).finally(() => {
+            isMonted = false
         })
     }, [])
 

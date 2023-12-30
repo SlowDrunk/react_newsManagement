@@ -1,0 +1,71 @@
+/* 样式化标题 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #333;
+  font-family: "Arial", sans-serif;
+}
+
+/* 样式化链接 */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* 样式化强调文本 */
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+/* 样式化代码块 */
+pre {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+code {
+  font-family: "Courier New", monospace;
+}
+
+/* 样式化引用 */
+blockquote {
+  border-left: 2px solid #007bff;
+  padding-left: 10px;
+  margin: 10px 0;
+}
+
+/* 样式化列表 */
+ul,
+ol {
+  margin-bottom: 10px;
+}
+
+/* 样式化表格 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+th,
+td {
+  border: 1px solid #007bff;
+  padding: 8px;
+  text-align: left;
+}
+
+/* 样式化图片 */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}

@@ -93,6 +93,7 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+  line-height: 18px;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -164,4 +165,8 @@ aside {
 /* 水平滚动条时滚动块的宽度 */
 ::-webkit-scrollbar-thumb:horizontal {
   width: 12px;
+}
+
+p {
+
 }

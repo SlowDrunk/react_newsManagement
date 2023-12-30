@@ -48,6 +48,8 @@ export default function SideBar() {
   }, [])
   // 组件挂载完成取数据
   useEffect(() => {
+    let isMonted = true
+    if (!isMonted) return
     axios.get('http://localhost:3004/rights?_embed=children').then((res: any) => {
       if (res.data.length > 0) {
         setRouterMenu(res.data.map((item: any) => {
@@ -65,6 +67,8 @@ export default function SideBar() {
       }
     }).catch((e) => {
       console.error(e)
+    }).finally(() => {
+      isMonted = false
     })
   }, [currentRole])
 

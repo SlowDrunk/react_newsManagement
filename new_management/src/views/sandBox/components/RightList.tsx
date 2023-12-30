@@ -18,6 +18,8 @@ export default function RightList() {
     const [tableData, setTableData] = useState<TableItem[]>([])
     // 获取数据
     useEffect(() => {
+        let isMonted = true
+        if (!isMonted) return
         axios.get('http://localhost:3004/rights?_embed=children').then(res => {
             if (res.status === 200) {
                 setTableData(res.data.map((item: TableItem) => {
@@ -29,6 +31,10 @@ export default function RightList() {
             } else {
                 message.error('获取权限列表失败')
             }
+        }).catch(() => {
+            message.error('获取权限列表失败')
+        }).finally(() => {
+            isMonted = false
         })
     }, [])
     // 删除权限

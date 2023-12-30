@@ -12,6 +12,8 @@ export default function Login() {
     const dispatch = useDispatch()
     // 点击登录
     const onFinish = (value: any) => {
+        let isMonted = true
+        if (!isMonted) return
         axios.get(`http://localhost:3004/users?username=${value.username}&password=${value.password}&roleState=true`).then((res) => {
             if (res.data.length > 0) {
                 localStorage.setItem('token', generateRandomToken(32))
@@ -21,6 +23,10 @@ export default function Login() {
             } else {
                 message.error('用户名或密码不匹配')
             }
+        }).catch(() => {
+            message.error('用户名或密码不匹配')
+        }).finally(() => {
+            isMonted = false
         })
     }
     return (
