@@ -73,7 +73,7 @@ export default function NewEdit() {
                 region: userStore.region ? userStore.region : '全球',
                 author: userStore.username,
                 roleId: userStore.roleId,
-                auditState: 0,
+                auditState: 1,
                 publishState: 0,
                 createTime: Date.now(),
                 star: 0,

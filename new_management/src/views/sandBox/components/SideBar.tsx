@@ -76,6 +76,9 @@ export default function SideBar() {
   // 当前选择的菜单项
   const [currentMenuItem, setCurrentMenuItem] = useState<string>(history.location.pathname)
   const openKey = `/${history.location.pathname.split('/')[1]}`
+  useEffect(() => {
+    setCurrentMenuItem(history.location.pathname)
+  }, [history.location.pathname])
   // 选择菜单
   const changeMuneItem = (e: any) => {
     setCurrentMenuItem(e.key)

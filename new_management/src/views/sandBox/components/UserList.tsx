@@ -60,7 +60,7 @@ export default function UserList() {
                 message.error('获取用户列表失败')
             }
         })
-    }, [])
+    }, [roleId, region, username])
     // 获取区域信息
     useEffect(() => {
         axios.get('http://localhost:3004/regions').then(res => {

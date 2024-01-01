@@ -82,11 +82,9 @@ export default function NewsPriview() {
             children: news?.star,
         },
     ];
-
-
     return (
         <div>
-            <div onClick={() => {
+            <div className='mb-[13px] cursor-pointer' onClick={() => {
                 history.goBack()
             }}>
                 <ArrowLeftOutlined />
@@ -96,7 +94,7 @@ export default function NewsPriview() {
             </div>
             <div className='h-[1px] w-full bg-slate-400'></div>
             <div className='p-[18px] bg-[#fcfcfc]'>
-                <div dangerouslySetInnerHTML={{ __html: news?.content ? news.content : '' }}>
+                <div dangerouslySetInnerHTML={{ __html: news?.content ? news.content : '暂无内容' }}>
                 </div>
             </div>
 

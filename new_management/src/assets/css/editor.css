@@ -3,6 +3,11 @@
   border-radius: 12px;
   padding: 3px;
 }
+.rdw-editor-toolbar{
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
 .editorClassName {
   min-height: 480px;
 }
