@@ -4,6 +4,13 @@ import persistConfig from './persistConfig';
 import rootReducer from './reducers';
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({ reducer: persistedReducer });
+
+
+const store = configureStore({
+    reducer: persistedReducer, middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
+});
 export const persistor = persistStore(store);
 export default store;

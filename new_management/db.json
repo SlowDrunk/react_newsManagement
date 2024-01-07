@@ -801,7 +801,8 @@
       "star": 309,
       "view": 479,
       "id": 7,
-      "publishTime": 1615778917074
+      "publishTime": 1615778917074,
+      "constent": "<h2 style=\"text-align:start;\"><span style=\"color: rgb(0,0,0);\"><strong>Controlled Components</strong></span></h2>\n<p style=\"text-align:start;\"><span style=\"color: rgb(0,0,0);font-size: 17px;\">In HTML, form elements such as</span> <span style=\"color: rgb(0,0,0);font-size: 17px;\"><code>&lt;input&gt;</code>,</span> <span style=\"color: rgb(0,0,0);font-size: 17px;\"><code>&lt;textarea&gt;</code>, and</span> <span style=\"color: rgb(0,0,0);font-size: 17px;\"><code>&lt;select&gt;</code></span> <span style=\"color: rgb(0,0,0);font-size: 17px;\">typically maintain their own state and update it based on user input. In React, mutable state is typically kept in the state property of components, and only updated with</span> <a href=\"https://reactjs.org/docs/react-component.html#setstate\" target=\"_self\"><span style=\"color: rgb(26,26,26);background-color: rgba(187,239,253,0.3);font-size: 17px;\"><code>setState()</code></span></a><span style=\"color: rgb(0,0,0);font-size: 17px;\">.</span></p>\n<p style=\"text-align:start;\"><span style=\"color: rgb(0,0,0);font-size: 17px;\">We can combine the two by making the React state be the “single source of truth”. Then the React component that renders a form also controls what happens in that form on subsequent user input. An input form element whose value is controlled by React in this way is called a “controlled component”.</span></p>\n<p style=\"text-align:start;\"><span style=\"color: rgb(0,0,0);font-size: 17px;\">For example, if we want to make the previous example log the name when it is submitted, we can write the form as a controlled component:</span></p>\n<p style=\"text-align:start;\"><br>&nbsp;</p>\n"
     },
     {
       "title": "Thinking in React",
@@ -849,6 +850,21 @@
       "view": 0,
       "publishTime": 1704109609543,
       "id": 10
+    },
+    {
+      "title": "测试",
+      "categoryId": 3,
+      "content": "<p><span style=\"color: rgb(26,188,156);\">你打随便viu</span></p>\n",
+      "region": "欧洲",
+      "author": "lianzimeng",
+      "roleId": 3,
+      "auditState": 1,
+      "publishState": 0,
+      "createTime": 1704624718531,
+      "star": 0,
+      "view": 0,
+      "publishTime": 0,
+      "id": 11
     }
   ]
 }

@@ -5,10 +5,10 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import '@/assets/css/editor.css'
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from 'html-to-draftjs'
-import { Fragment } from "react";
 export default function RichEditor(props: any) {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [text, setText] = useState();
+
     const onEditorStateChange = function (editorState: any) {
         setEditorState(editorState);
         const { blocks } = convertToRaw(editorState.getCurrentContent());
@@ -20,13 +20,12 @@ export default function RichEditor(props: any) {
         props.setEditorContent(htmlContent)
     };
     useEffect(() => {
-        if (props.content) {
-            toDraft(props.content)
-        }
+        toDraft(props.content)
     }, [props.content])
 
     // 设置富文本框内容
     const toDraft = (value: string) => {
+        if (!props.content || props.content === "<p></p>") return
         const blocksFromHtml = htmlToDraft(value);
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);

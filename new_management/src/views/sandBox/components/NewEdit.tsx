@@ -36,7 +36,7 @@ export default function NewEdit() {
                 }
             })
         }
-    }, [routerParams])
+    }, [routerParams.id])
 
     useEffect(() => {
         let isMonted = true
@@ -158,7 +158,7 @@ export default function NewEdit() {
                     <div className='text-[14px] text-[skyblue]'>在此处编写新闻内容</div>
                 </div>
                 <div className='m-[24px]'>
-                    <RichEditor content={editorState} setEditorContent={(value: string) => { setEditorState(value) }}></RichEditor>
+                    <RichEditor content={routerParams.id ? editorState : ''} setEditorContent={(value: string) => { setEditorState(value) }}></RichEditor>
                 </div>
             </div>
             <div className='w-full flex flex-row justify-evenly'>
