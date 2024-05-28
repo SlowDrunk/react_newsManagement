@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { HomeOutlined, UserOutlined, PicRightOutlined, AlignCenterOutlined, ExclamationCircleOutlined, SketchOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd';
 import axios from 'axios';
+import {rolesApi} from '@/utils/supabaseServer'
 import { useSelector } from 'react-redux'
 const { Sider } = Layout
 
@@ -36,21 +37,26 @@ const iconMap: any = {
 
 export default function SideBar() {
   const userStore = useSelector((state: any) => state.user)
-  const { roleId } = userStore
+  const { roleid } = userStore
 
   const [routerMenu, setRouterMenu] = useState<MenuItem[]>()
   // 根据当前登录的用户角色渲染菜单
   const [currentRole, setcurrentRole] = useState<string[]>()
   useEffect(() => {
-    axios.get(`http://localhost:3004/roles/${roleId}`).then((res) => {
-      setcurrentRole(res.data.rights.checked)
+    rolesApi.getCurrentRole(roleid).then(res=>{
+      console.log(res)
+      if(res?.length){
+        setcurrentRole(res[0].rights.checked)
+      }
     })
+
   }, [])
   // 组件挂载完成取数据
   useEffect(() => {
     let isMonted = true
     if (!isMonted) return
     axios.get('http://localhost:3004/rights?_embed=children').then((res: any) => {
+      console.log(res)
       if (res.data.length > 0) {
         setRouterMenu(res.data.map((item: any) => {
           // pagepermisson用于确定菜单是否显示

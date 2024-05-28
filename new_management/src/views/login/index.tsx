@@ -6,27 +6,23 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { setUserInfo } from '@/redux/reducers/UserReducer'
 import generateRandomToken from '@/utils/renderToken'
+import { usersApi } from '@/utils/supabaseServer'
 
 export default function Login() {
     const history = useHistory()
     const dispatch = useDispatch()
     // 点击登录
     const onFinish = (value: any) => {
-        let isMonted = true
-        if (!isMonted) return
-        axios.get(`http://localhost:3004/users?username=${value.username}&password=${value.password}&roleState=true`).then((res) => {
-            if (res.data.length > 0) {
+        usersApi.login(value.username, value.password).then((res) => {
+            console.log(res)
+            if (res) {
                 localStorage.setItem('token', generateRandomToken(32))
                 // 将用户信息存储在redux中
-                dispatch(setUserInfo(res.data[0]))
+                dispatch(setUserInfo(res))
                 history.push('/')
             } else {
                 message.error('用户名或密码不匹配')
             }
-        }).catch(() => {
-            message.error('用户名或密码不匹配')
-        }).finally(() => {
-            isMonted = false
         })
     }
     return (
