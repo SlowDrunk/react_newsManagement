@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Layout, Menu } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { HomeOutlined, UserOutlined, PicRightOutlined, AlignCenterOutlined, ExclamationCircleOutlined, SketchOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd';
 import axios from 'axios';
-import {rolesApi} from '@/utils/supabaseServer'
+import { rightsApi, rolesApi } from '@/utils/supabaseServer'
 import { useSelector } from 'react-redux'
 const { Sider } = Layout
 
@@ -38,43 +38,33 @@ const iconMap: any = {
 export default function SideBar() {
   const userStore = useSelector((state: any) => state.user)
   const { roleid } = userStore
+  console.log(userStore)
 
-  const [routerMenu, setRouterMenu] = useState<MenuItem[]>()
+  const [routerMenu, setRouterMenu] = useState<any[]>()
   // 根据当前登录的用户角色渲染菜单
   const [currentRole, setcurrentRole] = useState<string[]>()
   useEffect(() => {
-    rolesApi.getCurrentRole(roleid).then(res=>{
-      console.log(res)
-      if(res?.length){
+    rolesApi.getCurrentRole(roleid).then(res => {
+      if (res?.length) {
         setcurrentRole(res[0].rights.checked)
       }
     })
-
   }, [])
   // 组件挂载完成取数据
-  useEffect(() => {
-    let isMonted = true
-    if (!isMonted) return
-    axios.get('http://localhost:3004/rights?_embed=children').then((res: any) => {
-      console.log(res)
-      if (res.data.length > 0) {
-        setRouterMenu(res.data.map((item: any) => {
-          // pagepermisson用于确定菜单是否显示
+  useMemo(() => {
+    rightsApi.queryRightsWithChildren().then((res) => {
+      if (res) {
+        setRouterMenu(res.map((item: any) => {
           if (item.pagepermisson === 1 && currentRole?.includes(item.key)) {
-            const childrenArr = item.children?.length > 0 ? item.children.map((item: any) => {
-              if (item.pagepermisson === 1 && currentRole?.includes(item.key)) {
-                return getItem(item.title, item.key, iconMap[item.key])
+            const childrenArr: any = item.children?.length > 0 ? item.children.map((ele: any) => {
+              if (ele.pagepermisson === 1) {
+                return getItem(ele.title, ele.key, iconMap[ele.key])
               }
-            })
-              : null
+            }) : null
             return getItem(item.title, item.key, iconMap[item.key], childrenArr)
           }
         }))
       }
-    }).catch((e) => {
-      console.error(e)
-    }).finally(() => {
-      isMonted = false
     })
   }, [currentRole])
 

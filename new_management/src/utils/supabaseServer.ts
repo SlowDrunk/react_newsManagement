@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { message } from 'antd'
+
 const supabase = createClient('https://pliearsnqccuykfbpigz.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsaWVhcnNucWNjdXlrZmJwaWd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTYxMjg3ODAsImV4cCI6MjAzMTcwNDc4MH0.VYKvnNANXd7TiblmubDLArzDmNKCoPQYkpA1h0Epby4')
 type userItem = {
     id: number;
@@ -88,11 +89,12 @@ export const rolesApi = {
             .select('*')
         if (error) {
             message.error('获取角色列表失败')
+        } else {
+            return roles
         }
     },
     // 获取当前角色信息
     getCurrentRole: async (roleId: number) => {
-        console.log(roleId)
         let { data: roles, error } = await supabase
             .from('roles')
             .select('*')
@@ -102,9 +104,110 @@ export const rolesApi = {
         } else {
             return roles
         }
-    }
+    },
+    deleteRole: async (roleId: number) => {
+
+        const { error } = await supabase
+            .from('roles')
+            .delete()
+            .eq('id', roleId)
+        if (!error) {
+            message.success('删除成功')
+            return true
+        } else {
+            message.error('操作失败')
+            return false
+        }
+
+    },
+    updatedRole: async (roleId: number, check: string[]) => {
+        const { data, error } = await supabase
+            .from('roles')
+            .update({ right: check })
+            .eq('id', roleId)
+            .select()
+
+        if (error) {
+            message.error('更新失败')
+            return false
+        } else {
+            message.success('更新成功')
+            return true
+        }
+
+    },
 }
 // 权限相关
 export const rightsApi = {
-    
+    getAllRights: async () => {
+        let { data: rights, error } = await supabase
+            .from('rights')
+            .select('*')
+        if (!error) {
+            return rights
+        } else {
+            message.error('获取权限列表失败')
+            return null
+        }
+    },
+    // 获取当前角色权限
+    getCurrentRoleRights: async (rightid: number) => {
+        let { data: rights, error } = await supabase
+            .from('rights')
+            .select("*")
+            .eq('id', rightid)
+        if (!error) {
+            return rights || null;
+        } else {
+            message.error('获取权限列表失败')
+            return null
+        }
+    },
+    // 删除权限
+    deleteRight: async (rightId: number) => {
+        const { error } = await supabase
+            .from('rights')
+            .delete()
+            .eq('id', rightId)
+        const { error: childrenError } = await supabase.from('children').delete().eq('rightid', rightId)
+        if (!error || childrenError) {
+            message.success('删除成功')
+            return true
+        } else {
+            message.error('删除失败')
+            return false
+        }
+    },
+    // 更改权限
+    updateRight: async (rightId: number, pagepermisson: number) => {
+
+        const { data, error } = await supabase
+            .from('rights')
+            .update({ pagepermisson, })
+            .eq('id', rightId)
+            .select()
+        if (error) {
+            message.error('更新失败')
+            return null
+        } else {
+            return data
+        }
+    },
+    queryRightsWithChildren: async () => {
+        const allRight = await rightsApi.getAllRights()
+        let { data: AllChildren, error } = await supabase
+            .from('children')
+            .select('*')
+        if (!error) {
+            if (!allRight) return
+            allRight.forEach(item => {
+                item.children = AllChildren?.filter((ele: any) => ele.rightid === item.id) || []
+            })
+            return allRight
+        } else {
+            message.error('获取权限列表失败')
+            return null
+        }
+    }
+
 }

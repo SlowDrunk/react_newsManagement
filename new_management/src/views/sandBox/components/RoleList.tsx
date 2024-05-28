@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Table, Button, Popconfirm, message, Modal, Tree } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import axios from 'axios'
 import { UnorderedListOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { rightsApi, rolesApi } from '@/utils/supabaseServer'
 
 interface TableItem {
     id: number;
@@ -32,51 +33,34 @@ export default function RoleList() {
     const [currentRole, setCurrentRole] = useState<TableItem>({} as TableItem)
     // 获取数据
     useEffect(() => {
-        let isMonted = true
-        if (!isMonted) return
-        axios.get('http://localhost:3004/roles').then(res => {
-            if (res.status === 200) {
-                setTableData(res.data)
-            } else {
-                message.error('获取权限列表失败')
+        rolesApi.getAllRoles().then((res: any) => {
+            if (res) {
+                setTableData(res)
             }
         }).then(() => {
-            axios.get('http://localhost:3004/rights?_embed=children').then(res => {
-                if (res.status === 200) {
-                    setRightsData(res.data.map((item: RightsItem) => {
-                        if (item.children?.length === 0) {
-                            item.children = null
-                        }
-                        return item
-                    }))
-                } else {
-                    message.error('获取权限列表失败')
-                }
+            rightsApi.getAllRights().then((res: any) => {
+                setRightsData(res.map((item: RightsItem) => {
+                    if (item.children?.length === 0) {
+                        item.children = null
+                    }
+                    return item
+                }))
             })
-        }).catch(() => {
-            message.error('加载出错啦！')
-        }).finally(() => {
-            isMonted = false
         })
     }, [])
 
     // 删除角色
     const deleteRole = (item: TableItem) => {
-        axios.delete(`http://localhost:3004/roles/${item.id}`).then(res => {
-            if (res.status === 200) {
-                message.success('删除成功')
+        rolesApi.deleteRole(item.id).then((res: boolean) => {
+            if (res) {
                 setTableData(tableData.filter((ele: TableItem) => ele.id !== item.id))
-            }
-            else {
-                message.error('删除失败')
             }
         })
     }
     // 点击确定时的函数
     const handleOk = () => {
-        axios.patch(`http://localhost:3004/roles/${currentRole.id}`, { rights: currentRole.rights }).then((res) => {
-            if (res.status === 200) {
-                message.success('更新成功')
+        rolesApi.updatedRole(currentRole.id, currentRole.rights).then((res: boolean) => {
+            if (res) {
                 setTableData(tableData.map((item: TableItem, index: number) => {
                     if (item.id === currentRole.id) {
                         return {
@@ -99,7 +83,6 @@ export default function RoleList() {
     // 编辑当前角色的权限
     const handleRights = (checkedkeys: any) => {
         setCurrentRole({ ...currentRole, rights: checkedkeys })
-
     }
     // table配置
     const columns: ColumnsType<TableItem> = [
@@ -110,8 +93,8 @@ export default function RoleList() {
         },
         {
             title: '角色名称',
-            dataIndex: 'roleName',
-            key: 'roleName',
+            dataIndex: 'rolename',
+            key: 'rolename',
         },
         {
             title: '操作',

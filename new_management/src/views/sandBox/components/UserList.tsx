@@ -52,6 +52,7 @@ export default function UserList() {
     // 获取用户列表数据
     useEffect(() => {
         axios.get('http://localhost:3004/users?_expand=role').then(res => {
+            console.log(res.data)
             if (res.status === 200) {
                 setTableData(roleId === 1 ? res.data : [
                     ...res.data.filter((item: TableItem) => item.username === username),

@@ -3,6 +3,7 @@ import { Table, Tag, Button, Popconfirm, message, Popover, Switch } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import axios from 'axios'
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { rightsApi } from '@/utils/supabaseServer'
 
 interface TableItem {
     id: number;
@@ -11,68 +12,47 @@ interface TableItem {
     pagepermisson: number;
     grade: number;
     children?: TableItem[] | null
-    rightId?: number
+    rightid?: number
 }
 
 export default function RightList() {
     const [tableData, setTableData] = useState<TableItem[]>([])
     // 获取数据
     useEffect(() => {
-        let isMonted = true
-        if (!isMonted) return
-        axios.get('http://localhost:3004/rights?_embed=children').then(res => {
-            if (res.status === 200) {
-                setTableData(res.data.map((item: TableItem) => {
-                    if (item.children?.length === 0) {
-                        item.children = null
-                    }
-                    return item
-                }))
-            } else {
-                message.error('获取权限列表失败')
-            }
-        }).catch(() => {
-            message.error('获取权限列表失败')
-        }).finally(() => {
-            isMonted = false
+        rightsApi.queryRightsWithChildren().then((res: any) => {
+            setTableData(res.map((item: TableItem) => {
+                if (item.children?.length === 0) {
+                    item.children = null
+                }
+                return item
+            }))
         })
     }, [])
     // 删除权限
     const deleteRight = (item: TableItem) => {
         // 删除子级权限
-        if (item.rightId) {
+        if (item.rightid) {
             const newData = tableData.map((ele: TableItem) => {
-                if (ele.id === item.rightId) {
-                    axios.delete(`http://localhost:3004/children/${item.id}`).then((res) => {
-                        if (res.status !== 200) {
-                            message.error('删除失败')
-                            return
+                if (ele.id === item.rightid) {
+                    rightsApi.deleteRight(item.id).then(res => {
+                        if (res) {
+                            ele.children = ele.children?.filter((data: TableItem) => data.id !== item.id)
                         }
                     })
-                    ele.children = ele.children?.filter((data: TableItem) => data.id !== item.id)
                 }
                 return ele
             })
             setTableData(newData)
-        } else {
-            // 删除父级权限
-            axios.delete(`http://localhost:3004/rights/${item.id}`).then(res => {
-                if (res.status === 200) {
-                    setTableData(tableData.filter(data => data.id !== item.id))
-                }
-            })
         }
-
     }
     // 改变权限
     const changeRight = (item: TableItem) => {
         item.pagepermisson = item.pagepermisson === 1 ? 0 : 1
-        axios.patch(`http://localhost:3004/rights/${item.id}`, item).then((res) => {
-            if (res.status !== 200) {
-                message.error('权限修改失败')
+        rightsApi.updateRight(item.id, item.pagepermisson).then(res=>{
+            if(res){
+                setTableData([...tableData])
             }
         })
-        setTableData([...tableData])
     }
 
     // table配置
