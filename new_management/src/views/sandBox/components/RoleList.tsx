@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Table, Button, Popconfirm, message, Modal, Tree } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Table, Button, Popconfirm, Modal, Tree } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import axios from 'axios'
 import { UnorderedListOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { rightsApi, rolesApi } from '@/utils/supabaseServer'
 
@@ -51,7 +50,7 @@ export default function RoleList() {
 
     // 删除角色
     const deleteRole = (item: TableItem) => {
-        rolesApi.deleteRole(item.id).then((res: boolean) => {
+        rolesApi.deleteRole(item.id).then((res) => {
             if (res) {
                 setTableData(tableData.filter((ele: TableItem) => ele.id !== item.id))
             }
@@ -59,7 +58,7 @@ export default function RoleList() {
     }
     // 点击确定时的函数
     const handleOk = () => {
-        rolesApi.updatedRole(currentRole.id, currentRole.rights).then((res: boolean) => {
+        rolesApi.updatedRole(currentRole.id, currentRole.rights).then((res) => {
             if (res) {
                 setTableData(tableData.map((item: TableItem, index: number) => {
                     if (item.id === currentRole.id) {

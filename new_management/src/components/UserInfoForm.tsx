@@ -28,7 +28,7 @@ const UserInfoForm = forwardRef((props: UserInfoFormProps, ref: any) => {
     const [userAvatar, setUserAvatar] = useState<string>('')
     // redux
     const userStore = useSelector((state: any) => state.user)
-    const { roleId, region } = userStore
+    const { roleid, region } = userStore
 
     useEffect(() => {
         if (ref && props.userInfo) {
@@ -79,7 +79,7 @@ const UserInfoForm = forwardRef((props: UserInfoFormProps, ref: any) => {
             </Form.Item>
             <Form.Item
                 label="角色"
-                name="roleId"
+                name="roleid"
                 rules={[{ required: true, message: '请选择角色' }]}
             >
                 <Select
@@ -89,7 +89,7 @@ const UserInfoForm = forwardRef((props: UserInfoFormProps, ref: any) => {
                         return {
                             value: item.id,
                             label: item.roleName,
-                            disabled: roleId === 1 ? false : item.id !== roleId
+                            disabled: roleid === 1 ? false : item.id !== roleid
                         }
                     })}
                     onChange={(value: number) => {

@@ -21,7 +21,14 @@ export const usersApi = {
             .select('*')
         if (error) {
             message.error('获取用户列表失败')
+            return null
         }
+        const roleList = await rolesApi.getAllRoles()
+        users?.forEach((user: any) => {
+            user.role = roleList?.find(role => role.id === user.roleid)
+        })
+        return users
+
     },
     // 登陆
     login: async (account: string, password: string) => {
@@ -41,15 +48,15 @@ export const usersApi = {
         let { data: user, error: Error } = await supabase.from('users').select("*").eq('username', userInfo.username)
         if (user?.length) {
             message.error('该用户名已被注册')
-            return false
+            return null
         }
         let { data: result, error } = await supabase.from('users').insert([{ ...userInfo }])
         if (!error) {
             message.success('注册成功')
-            return true
+            return result
         } else {
             message.error('注册失败')
-            return true
+            return null
         }
     },
     // 注销
@@ -116,7 +123,7 @@ export const rolesApi = {
             return true
         } else {
             message.error('操作失败')
-            return false
+            return null
         }
 
     },
@@ -129,7 +136,7 @@ export const rolesApi = {
 
         if (error) {
             message.error('更新失败')
-            return false
+            return null
         } else {
             message.success('更新成功')
             return true
@@ -175,12 +182,11 @@ export const rightsApi = {
             return true
         } else {
             message.error('删除失败')
-            return false
+            return null
         }
     },
     // 更改权限
     updateRight: async (rightId: number, pagepermisson: number) => {
-
         const { data, error } = await supabase
             .from('rights')
             .update({ pagepermisson, })
@@ -210,4 +216,19 @@ export const rightsApi = {
         }
     }
 
+}
+// 区域信息
+export const regionsApi = {
+    getAllRegions: async () => {
+        let { data: regions, error } = await supabase
+            .from('regions')
+            .select('*')
+        if (!error) {
+            return regions
+        } else {
+            message.error('获取地域列表失败')
+            return null
+        }
+
+    }
 }

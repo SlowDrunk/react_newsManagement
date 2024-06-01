@@ -3,7 +3,6 @@ import { Form, Input, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
 import { setUserInfo } from '@/redux/reducers/UserReducer'
 import generateRandomToken from '@/utils/renderToken'
 import { usersApi } from '@/utils/supabaseServer'
@@ -14,14 +13,11 @@ export default function Login() {
     // 点击登录
     const onFinish = (value: any) => {
         usersApi.login(value.username, value.password).then((res) => {
-            console.log(res)
             if (res) {
                 localStorage.setItem('token', generateRandomToken(32))
                 // 将用户信息存储在redux中
                 dispatch(setUserInfo(res))
                 history.push('/')
-            } else {
-                message.error('用户名或密码不匹配')
             }
         })
     }

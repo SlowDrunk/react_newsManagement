@@ -38,7 +38,6 @@ const iconMap: any = {
 export default function SideBar() {
   const userStore = useSelector((state: any) => state.user)
   const { roleid } = userStore
-  console.log(userStore)
 
   const [routerMenu, setRouterMenu] = useState<any[]>()
   // 根据当前登录的用户角色渲染菜单
