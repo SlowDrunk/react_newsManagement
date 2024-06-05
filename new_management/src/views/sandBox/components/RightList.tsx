@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Tag, Button, Popconfirm, message, Popover, Switch } from 'antd'
+import { Table, Tag, Button, Popconfirm, Popover, Switch } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import axios from 'axios'
 import { EditOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { rightsApi } from '@/utils/supabaseServer'
 
